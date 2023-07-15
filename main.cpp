@@ -1,166 +1,171 @@
 #include <iostream>
-#include <vector>
+
+using namespace std;
+
+#include <iostream>
+#include <cstdlib>
 #include <ctime>
 
 using namespace std;
 
-// Define the direction array, used to judge the position of the surrounding grid
-int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+int main()
+{
+  int choice;
+  int mhp, hp, i, init, atk, def, matk, mdef, hurt, mhurt, agi, magi;
+  atk = 10;
+  def = 15;
+  agi = 5;
+  matk = 10;
+  mdef = 15;
+  magi = 5;
 
-// gamestate
-enum GameState {
-    PLAYING,
-    WON,
-    LOST
-};
+  srand((unsigned)time(0));
+  init = rand()%2+1;
+  mhp = rand()%50 + 60;
+  hp = rand()%20 + 80;
+  cout<<"===== Text Base RPG Game =====\n\n";
+  if (init == 1) {
+  cout<<"Your move.\n==========\n";
+  while (hp > 0 || mhp > 0) {
+    cout<<"Choose your move?\n1 - Special Attack\n2 - Normal Attack\n3 - Guard\n";
+     do{cin>>choice;}while(choice>3 || choice<1);
+    switch (choice) {
+      case 1:
+        atk = rand()%20+10;
+	def = rand()%10+10;
+	agi = rand()%5;
+	break;
+      case 2:
+        atk = rand()%5+10;
+	def = rand()%10+10;
+	agi = rand()%15;
+        break;
+      case 3:
+        atk = rand()%10+10;
+	def = rand()%20+10;
+	agi = rand()%5;
+	break;
+	}
+    choice = rand()%3;
+    switch (choice) {
+      case 1:
+        matk = rand()%20+10;
+	mdef = rand()%10+10;
+	magi = rand()%5;
+	break;
+      case 2:
+        matk = rand()%5+10;
+	mdef = rand()%10+10;
+	magi = rand()%15;
+        break;
+      case 3:
+        matk = rand()%10+10;
+	mdef = rand()%20+10;
+	magi = rand()%5;
+	break;
+	}
 
-class Minesweeper {
-private:
-    int rows;
-    int cols;
-    int numMines;
-    vector<vector<char>> board;
-    vector<vector<bool>> revealed;
-    vector<vector<bool>> marked;
-    GameState state;
 
-public:
-    Minesweeper(int numRows, int numCols, int numMines) : rows(numRows), cols(numCols), numMines(numMines) {
-        board.resize(rows, vector<char>(cols, '0'));
-        revealed.resize(rows, vector<bool>(cols, false));
-        marked.resize(rows, vector<bool>(cols, false));
-        state = GameState::PLAYING;
+    mhurt = (atk - magi) - (mdef/atk);
+    if (mhurt < 0) {
+      mhurt = 0;
     }
+    mhp = mhp - mhurt;
+    cout<<"You did "<<mhurt<<" damage to the monster!\n";
+    cin.get();
 
-    void placeMines() {
-        int count = 0;
-        while (count < numMines) {
-            int x = rand() % rows;
-            int y = rand() % cols;
-            if (board[x][y] != '*') {
-                board[x][y] = '*';
-                count++;
-            }
+    if (mhp < 1) {
+      cout<<"You killed the monster!! You won with "<<hp<<" hp left.\n";
+      cin.get();
+      return 0;
+      }
+    cout<<"The monster now have "<<mhp<<" hp left.\n";
+    hurt = (matk - agi) - (def/matk);
+    if (hurt < 0) {
+      hurt = 0;
+    }
+    hp = hp - hurt;
+    cout<<"The monster hit you for "<<hurt<<" damage.\n";
+
+    if (hp < 1) {
+      cout<<"You died. The monster still has "<<mhp<<" hp left.\n";
+      cin.get();
+      return 0;
+      }
+cout<<"You now have "<<hp<<" hp left.\n\n";
+     }
+     }
+
+
+  else {
+  cout<<"Monster start.\n==============\n";
+    while (hp > 0 || mhp > 0) {
+    choice = rand()%3;
+    switch (choice) {
+      case 1:
+        matk = rand()%20+10;
+	mdef = rand()%10+10;
+	magi = rand()%5;
+	break;
+      case 2:
+        matk = rand()%5+10;
+	mdef = rand()%10+10;
+	magi = rand()%15;
+        break;
+      case 3:
+        matk = rand()%10+10;
+	mdef = rand()%20+10;
+	magi = rand()%5;
+	break;
+	}
+
+    hurt = (matk - agi) - (def/matk);
+    if (hurt < 0) {
+      hurt = 0;
+    }
+    hp = hp - hurt;
+    cout<<"The monster hit you for "<<hurt<<" damage.\n";
+
+    if (hp < 1) {
+      cout<<"You died. The monster still has "<<mhp<<" hp left.\n";
+      cin.get();
+      return 0;
+      }
+ cout<<"You now have "<<hp<<" hp left.\n\n";
+    cout<<"Choose your move?\n1 - Critical Attack\n2 - Basic Attack\n3 - Guard\n";
+     do{cin>>choice;}while(choice>3 || choice<1);
+    switch (choice) {
+      case 1:
+        atk = rand()%20+10;
+	def = rand()%10+10;
+	agi = rand()%5;
+	break;
+      case 2:
+        atk = rand()%5+10;
+	def = rand()%10+10;
+	agi = rand()%15;
+        break;
+      case 3:
+        atk = rand()%10+10;
+	def = rand()%20+10;
+	agi = rand()%5;
+	break;
         }
+
+
+
+    mhurt = (atk - magi) - (mdef/atk);
+    if (mhurt < 0) {
+      mhurt = 0;
     }
+    mhp = mhp - mhurt;
+    cout<<"You did "<<mhurt<<" damage to the monster!\n";
+    cin.get();
 
-    void calculateNumbers() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (board[i][j] != '*') {
-                    int count = 0;
-                    for (int k = 0; k < 8; k++) {
-                        int x = i + dx[k];
-                        int y = j + dy[k];
-                        if (isValid(x, y) && board[x][y] == '*') {
-                            count++;
-                        }
-                    }
-                    board[i][j] = count + '0';
-                }
-            }
-        }
-    }
-
-    void revealCell(int row, int col) {
-        if (!isValid(row, col) || revealed[row][col] || marked[row][col]) {
-            return;
-        }
-
-        if (board[row][col] == '*') {
-            state = GameState::LOST;
-            return;
-        }
-
-        revealed[row][col] = true;
-
-        if (board[row][col] == '0') {
-            for (int k = 0; k < 8; k++) {
-                int x = row + dx[k];
-                int y = col + dy[k];
-                revealCell(x, y);
-            }
-        }
-
-        if (checkWin()) {
-            state = GameState::WON;
-        }
-    }
-
-    void toggleMark(int row, int col) {
-        if (isValid(row, col)) {
-            marked[row][col] = !marked[row][col];
-        }
-    }
-
-    bool checkWin() {
-        int count = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (board[i][j] != '*' && revealed[i][j]) {
-                    count++;
-                }
-            }
-        }
-        return count == rows * cols - numMines;
-    }
-
-    void displayBoard() {
-        cout << "  ";
-        for (int j = 0; j < cols; j++) {
-            cout << j << " ";
-        }
-        cout << endl;
-        for (int i = 0; i < rows; i++) {
-            cout << i << " ";
-            for (int j = 0; j < cols; j++) {
-                if (revealed[i][j]) {
-                    cout << board[i][j] << " ";
-                } else if (marked[i][j]) {
-                    cout << "M ";
-                } else {
-                    cout << "- ";
-                }
-            }
-            cout << endl;
-        }
-    }
-
-    bool isValid(int row, int col) {
-        return row >= 0 && row < rows && col >= 0 && col < cols;
-    }
-
-    GameState getState() const {
-        return state;
-    }
-};
-
-int main() {
-    srand(time(nullptr));
-
-    Minesweeper game(9, 9, 10);
-    game.placeMines();
-    game.calculateNumbers();
-
-    while (game.getState() == GameState::PLAYING) {
-        game.displayBoard();
-
-        int row, col;
-        cout << "Enter row and column (separated by space): ";
-        cin >> row >> col;
-
-        game.revealCell(row, col);
-        game.toggleMark(row, col);
-    }
-
-    game.displayBoard();
-
-    if (game.getState() == GameState::WON) {
-        cout << "Congratulations! You won the game." << endl;
-    } else {
-        cout << "Game over! You lost." << endl;
-    }
-
-    return 0;
-}
+    if (mhp < 1) {
+      cout<<"You killed the monster!! You won with "<<hp<<" hp left.\n";
+      cin.get();
+      return 0;
+      }
+    cout<<"The monster now have "<<mhp<<" hp left.\n";
+  } } }
